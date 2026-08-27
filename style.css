@@ -262,34 +262,3 @@ select{
     background:#ffd54f;
 }
 
-.swipe-wrapper{
-    position:relative;
-    overflow:hidden;
-}
-
-.delete-area{
-    position:absolute;
-    right:0;
-    top:0;
-
-    width:80px;
-    height:100%;
-
-    background:#ff3b30;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-}
-
-.delete-area button{
-    background:none;
-    border:none;
-    color:white;
-    font-size:24px;
-}
-
-.swipe-content{
-    background:var(--card);
-    transition:0.3s;
-}
