@@ -229,8 +229,23 @@ select{
 
 
 
+#winningNumbers, #bonusNumbers{
+	width:100%;
 
+}
 
+a:link{
+  color : #333;
+}
+a:visited{
+  color : #333;
+}
+a:active{
+  color : #333;
+}
+a:hover{
+  color : #333;
+}
 
 .delete-btn{
     position:absolute;

@@ -63,10 +63,9 @@
 			    <div id="winningToggle" onclick="toggleWinningInfo()">
 			        ▶ 당첨번호 보기
 			    </div>
-			    <div id="winningInfo">
-	    </div>
-
-</div>
+			    <div id="winningInfo"></div>
+			    <a href="https://www.mizuhobank.co.jp/takarakuji/check/index.html" target="_blank" color : black; >로또번호 확인</a>
+		</div>
 
     </div>
 
@@ -303,12 +302,12 @@ function loadHistory(){
 
 		const winningNumbers =
 		    (localStorage.getItem("winningNumbers") || "")
-		        .split(",")
+		        .split(" ")
 		        .map(Number);
 
 		const bonusNumbers =
 		    (localStorage.getItem("bonusNumbers") || "")
-		        .split(",")
+		        .split(" ")
 		        .map(Number);
 		    
     
