@@ -8,20 +8,11 @@
 
     <link rel="stylesheet" href="style.css">
     
-<style>
-
-</style>
-</head>
-<body>
-
-
-    
-<script src="script.js"></script>
-
-
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     
 <div class="top-bar">
-    <button id="themeToggle">🌙 다크모드</button>
+        <button id="showQR" class="QR-btn btn btn-secondary" data-bs-toggle="modal" data-bs-target="#myModal" >QR code</button>
+		<button id="themeToggle">🌙 다크모드</button>
 </div>
 
 <div class="container">
@@ -53,9 +44,30 @@
             </button>
         </div>
 
-        <div style="align-self:end;">
-            <button class="clear-btn" onclick="clearHistory()">이력 삭제</button>
+
+
+		<div class="middle-bar">
+			<button class="btn btn-success" onclick="location.href='winning.html'">
+			    당첨번호 입력
+			</button>
+
+	        <div style="align-self:end;">
+	            <button class="clear-btn" onclick="clearHistory()">이력 삭제</button>
+	        </div>
+	        
+
         </div>
+	    
+	    
+	    <div class="winning-area">
+			    <div id="winningToggle" onclick="toggleWinningInfo()">
+			        ▶ 당첨번호 보기
+			    </div>
+			    <div id="winningInfo">
+	    </div>
+
+</div>
+
     </div>
 
     <div id="result" class="result"></div>
@@ -65,6 +77,58 @@
         <div id="history"></div>
     </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+<div class="modal fade" id="myModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">QR CODE</h5>
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <img src="./qr.png" id="qr">
+            </div>
+
+            <div class="modal-footer">
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal">
+                    닫기
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <script>
 function generateNumbers(count){
@@ -135,6 +199,91 @@ function saveHistory(numberCount, drawCount, results){
     );
 }
 
+
+
+
+
+
+function checkLotteryRank(
+    lotteryType,
+    winningNumbers,
+    bonusNumbers,
+    userNumbers
+){
+
+    const mainMatchCount =
+        userNumbers.filter(
+            num => winningNumbers.includes(num)
+        ).length;
+
+    const bonusMatchCount =
+        userNumbers.filter(
+            num => bonusNumbers.includes(num)
+        ).length;
+
+    let rank = "낙첨";
+
+    if(lotteryType === "6"){
+
+        if(mainMatchCount === 6){
+            rank = "1등";
+        }
+        else if(
+            mainMatchCount === 5 &&
+            bonusMatchCount >= 1
+        ){
+            rank = "2등";
+        }
+        else if(mainMatchCount === 5){
+            rank = "3등";
+        }
+        else if(mainMatchCount === 4){
+            rank = "4등";
+        }
+        else if(mainMatchCount === 3){
+            rank = "5등";
+        }
+
+    }else{
+
+        if(mainMatchCount === 7){
+            rank = "1등";
+        }
+        else if(
+            mainMatchCount === 6 &&
+            bonusMatchCount >= 1
+        ){
+            rank = "2등";
+        }
+        else if(mainMatchCount === 6){
+            rank = "3등";
+        }
+        else if(mainMatchCount === 5){
+            rank = "4등";
+        }
+        else if(mainMatchCount === 4){
+            rank = "5등";
+        }
+        else if(
+            mainMatchCount === 3 &&
+            bonusMatchCount >= 1
+        ){
+            rank = "6등";
+        }
+
+    }
+
+    return {
+        rank,
+        mainMatchCount,
+        bonusMatchCount
+    };
+}
+
+
+
+
+
 function loadHistory(){
 
     const history = JSON.parse(
@@ -147,6 +296,23 @@ function loadHistory(){
     historyDiv.innerHTML = "";
 
     history.forEach(item=>{
+    
+    
+		const lotteryType =
+		    localStorage.getItem("lotteryType");
+
+		const winningNumbers =
+		    (localStorage.getItem("winningNumbers") || "")
+		        .split(",")
+		        .map(Number);
+
+		const bonusNumbers =
+		    (localStorage.getItem("bonusNumbers") || "")
+		        .split(",")
+		        .map(Number);
+		    
+    
+    
 
         const details =
             document.createElement("details");
@@ -166,20 +332,58 @@ function loadHistory(){
 
         content.className = "history-content";
 
-        content.innerHTML =
-    item.results.map(arr =>
 
-        `<div class="history-ticket">
+content.innerHTML =
+item.results.map(arr => {
 
-            ${arr.map(num =>
+    const result =
+        checkLotteryRank(
+            lotteryType,
+            winningNumbers,
+            bonusNumbers,
+            arr
+        );
 
-                `<span class="ball">${num}</span>`
+    return `
 
-            ).join('')}
+        <div class="history-ticket">
 
-        </div>`
+            ${arr.map(num => {
 
-    ).join('');
+                let cls = "ball";
+
+                if(winningNumbers.includes(num)){
+                    cls += " match";
+                }
+                else if(
+                    bonusNumbers.includes(num)
+                ){
+                    cls += " bonus-match";
+                }
+
+                return `
+                    <span class="${cls}">
+                        ${num}
+                    </span>
+                `;
+            }).join('')}
+
+            <div class="rank-info">
+
+                ${result.rank}
+
+                (본번호
+                ${result.mainMatchCount}개,
+
+                보너스
+                ${result.bonusMatchCount}개)
+
+            </div>
+
+        </div>
+    `;
+
+}).join('');
 
         const deleteBtn =
             document.createElement("button");
@@ -203,13 +407,6 @@ function loadHistory(){
 
         historyDiv.appendChild(details);
     });
-    
-    
-    
-    
-    
-    
-    
   
 }
 
@@ -239,8 +436,95 @@ function deleteHistory(id){
 }
 
 
+function showWinningInfo(){
+
+    const lotteryType =
+        localStorage.getItem("lotteryType");
+
+    const winningNumbers =
+        localStorage.getItem("winningNumbers");
+
+    const bonusNumbers =
+        localStorage.getItem("bonusNumbers");
+
+    document.getElementById("winningInfo").innerHTML =
+
+        lotteryType ?
+
+        `
+            <b>Loto${lotteryType}</b><br>
+            본번호 : ${winningNumbers}<br>
+            보너스 : ${bonusNumbers}
+        `
+
+        :
+
+        "등록된 당첨번호 없음";
+}
+
+showWinningInfo();
+
+
+
+function toggleWinningInfo(){
+
+    const info =
+        document.getElementById("winningInfo");
+
+    const toggle =
+        document.getElementById("winningToggle");
+
+    if(info.classList.contains("show")){
+
+        info.classList.remove("show");
+
+        toggle.textContent =
+            "▶ 당첨번호 보기";
+
+        return;
+    }
+
+    const lotteryType =
+        localStorage.getItem("lotteryType");
+
+    const winningNumbers =
+        localStorage.getItem("winningNumbers");
+
+    const bonusNumbers =
+        localStorage.getItem("bonusNumbers");
+
+    if(!lotteryType){
+
+        info.innerHTML =
+            "등록된 당첨번호가 없습니다.";
+
+    }else{
+
+        info.innerHTML = `
+            <div>
+                <b>Loto${lotteryType}</b>
+            </div>
+
+            <div>
+                본번호 : ${winningNumbers}
+            </div>
+
+            <div>
+                보너스 : ${bonusNumbers}
+            </div>
+        `;
+    }
+
+    info.classList.add("show");
+
+    toggle.textContent =
+        "▼ 당첨번호 숨기기";
+}
+
+
+
 loadHistory();
 </script>
-
-</body>
+<script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script></body>
 </html>

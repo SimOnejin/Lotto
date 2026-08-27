@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>당첨번호 확인</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+<h3>현재 저장된 당첨번호</h3>
+
+<div id="currentWinning"></div>
+    <h1>당첨번호 입력</h1>
+
+    <select id="lotteryType">
+        <option value="7">Loto7</option>
+        <option value="6">Loto6</option>
+    </select>
+
+    <br><br>
+
+    <input
+        type="text"
+        id="winningNumbers"
+        placeholder="본번호 입력 (쉼표로 구분)">
+
+    <br><br>
+
+    <input
+        type="text"
+        id="bonusNumbers"
+        placeholder="보너스번호 입력">
+
+    <br><br>
+
+    <button onclick="saveWinningInfo()">
+        저장 후 결과 보기
+    </button>
+
+</div>
+
+<script>
+
+function saveWinningInfo(){
+
+    const lotteryType =
+        document.getElementById("lotteryType").value;
+
+    const winningNumbers =
+        document.getElementById("winningNumbers").value;
+
+    const bonusNumbers =
+        document.getElementById("bonusNumbers").value;
+
+    localStorage.setItem(
+        "lotteryType",
+        lotteryType
+    );
+
+    localStorage.setItem(
+        "winningNumbers",
+        winningNumbers
+    );
+
+    localStorage.setItem(
+        "bonusNumbers",
+        bonusNumbers
+    );
+
+    location.href="index.html";
+    
+    
+    window.onload = () => {
+
+    const lotteryType =
+        localStorage.getItem("lotteryType") || "7";
+
+    const winningNumbers =
+        localStorage.getItem("winningNumbers") || "";
+
+    const bonusNumbers =
+        localStorage.getItem("bonusNumbers") || "";
+
+    document.getElementById("lotteryType").value =
+        lotteryType;
+
+    document.getElementById("winningNumbers").value =
+        winningNumbers;
+
+    document.getElementById("bonusNumbers").value =
+        bonusNumbers;
+
+    document.getElementById("currentWinning").innerHTML = `
+        <p>종류 : Loto${lotteryType}</p>
+        <p>본번호 : ${winningNumbers}</p>
+        <p>보너스 : ${bonusNumbers}</p>
+    `;
+};
+
+function saveWinningInfo(){
+
+    localStorage.setItem(
+        "lotteryType",
+        document.getElementById("lotteryType").value
+    );
+
+    localStorage.setItem(
+        "winningNumbers",
+        document.getElementById("winningNumbers").value
+    );
+
+    localStorage.setItem(
+        "bonusNumbers",
+        document.getElementById("bonusNumbers").value
+    );
+
+    alert("저장되었습니다.");
+
+    location.href = "index.html";
+}
+}
+
+</script>
+
+</body>
+</html>

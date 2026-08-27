@@ -9,7 +9,6 @@ body{
 .container{
     max-width:900px;
     margin:auto;
-    background:white;
     padding:25px;
     border-radius:12px;
     box-shadow:0 4px 12px rgba(0,0,0,0.1);
@@ -52,6 +51,19 @@ button:hover{
 }
 
 
+.middle-bar{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    align-items:center;
+    margin:15px 0;
+}
+
+.middle-bar button{
+    flex:1;
+    max-width:200px;
+}
+
 
 .history{
     margin-top:30px;
@@ -64,6 +76,7 @@ button:hover{
 
 .clear-btn{
     background:#d32f2f;
+    border-radius:5px;
 }
 
 .clear-btn:hover{
@@ -83,7 +96,7 @@ button:hover{
     --border:#ddd;
 }
 
-.dark{
+body.dark{
     --bg:#121212;
     --card:#1e1e1e;
     --text:#ffffff;
@@ -105,6 +118,13 @@ body{
     padding:12px;
 }
 
+.container.dark{
+    width:100%;
+    max-width:none;
+    box-sizing:border-box;
+    padding:12px;
+    background:#333;
+}
 
 
 .controls{
@@ -147,11 +167,31 @@ select{
     border:none;
     padding:10px 15px;
     border-radius:20px;
-    background:#444;
-    color:#fff;
+    background:#EEE;
+    color:#000;
+    
 }
 
+#themeToggle.dark{
+    background:#333;
+    color:#FFF;
+    
+}
 
+#showQR{
+    border:none;
+    padding:10px 15px;
+    border-radius:20px;
+    background:#EEE;
+    color:#000;
+    margin-right:4px;
+}
+
+.modal-body{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
 
 .history-item{
     background:var(--card);
@@ -162,7 +202,7 @@ select{
 }
 
 
-.history-item:not(:last-child){
+.history-item{
     border-bottom:2px solid #888;
 }
 
@@ -277,4 +317,98 @@ select{
 
     font-size:14px;
     font-weight:bold;
+    max-width:43px;
 }
+
+
+.ticket,
+.history-ticket{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+}
+
+.number{
+    width:clamp(32px, 9vw, 43px);
+    height:clamp(32px, 9vw, 43px);
+
+    flex-shrink:0;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:50%;
+
+    background:#ffcc00;
+    font-weight:bold;
+}
+
+
+
+
+
+
+
+.match{
+    background:#4caf50 !important;
+    color:white;
+}
+
+.bonus-match{
+    background:#ff9800 !important;
+    color:white;
+}
+
+.rank-info{
+    margin-top:5px;
+    font-weight:bold;
+    color:#2196f3;
+}
+
+
+
+
+
+
+
+
+#winningToggle{
+    cursor:pointer;
+    font-weight:bold;
+    padding:10px;
+    border-radius:8px;
+    background:#eee;
+}
+
+#winningInfo{
+    display:none;
+
+    margin-top:10px;
+    padding:10px;
+
+    border:1px solid #ddd;
+    border-radius:8px;
+}
+
+#winningInfo.show{
+    display:block;
+}
+
+.container.dark #winningToggle{
+    background:#333;
+    color:#fff;
+}
+
+.container.dark #winningInfo{
+    border-color:#555;
+}
+
+
+
+
+
+
+
