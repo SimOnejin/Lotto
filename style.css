@@ -212,7 +212,7 @@ select{
     align-items:center;
     justify-content:center;
 
-    font-size:clamp(20px, 4vw, 30px);
+    font-size:clamp(15px, 4vw, 25px);
     line-height:1;
 }
 
