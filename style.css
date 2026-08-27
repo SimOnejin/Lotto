@@ -51,24 +51,7 @@ button:hover{
     margin-top:20px;
 }
 
-.ticket{
-    padding:12px;
-    margin:10px 0;
-    background:#eef5ff;
-    border-radius:8px;
-}
 
-.number{
-    display:inline-block;
-    width:38px;
-    height:38px;
-    line-height:38px;
-    text-align:center;
-    border-radius:50%;
-    background:#ffcc00;
-    margin-right:6px;
-    font-weight:bold;
-}
 
 .history{
     margin-top:30px;
@@ -116,31 +99,13 @@ body{
 }
 
 .container{
-    max-width:600px;
-    margin:auto;
-    padding:16px;
+    width:100%;
+    max-width:none;
+    box-sizing:border-box;
+    padding:12px;
 }
 
-.ticket{
-    background:var(--card);
-    padding:15px;
-    margin:10px 0;
-    border-radius:15px;
-    border:1px solid var(--border);
-}
 
-.number{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    width:42px;
-    height:42px;
-    border-radius:50%;
-    margin:3px;
-    font-weight:bold;
-    background:#ffd54f;
-    color:#000;
-}
 
 .controls{
     display:flex;
@@ -205,6 +170,7 @@ select{
 .history-content{
     position:relative;
     padding:12px;
+    padding-right:60px;
 }
 
 .history-content button{
@@ -244,21 +210,50 @@ select{
 
 
 
+.ticket{
+    display:flex;
+    gap:6px;
 
-.ball{
-    display:inline-flex;
+    padding:12px;
+    margin:10px 0;
+
+    background:#eef5ff;
+    border-radius:8px;
+}
+
+.history-ticket{
+    display:flex;
+    gap:6px;
+    margin-bottom:8px;
+}
+
+.number{
+    flex:1;
+    aspect-ratio:1/1;
+
+    display:flex;
     align-items:center;
     justify-content:center;
 
-    width:20px;
-    height:20px;
-    margin: 1.5px;
+    border-radius:50%;
+    background:#ffcc00;
+
+    font-weight:bold;
+    max-width:43px;
+}
+
+.ball{
+    flex:1;
+    aspect-ratio:1/1;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
     border-radius:50%;
 
-    font-size:15px;
-    color:#000;
+    background:#ffcc00;
 
-    background:#ffd54f;
+    font-size:14px;
+    font-weight:bold;
 }
-
