@@ -3,6 +3,7 @@ body{
     background:#f4f6f8;
     margin:0;
     padding:20px;
+    padding-bottom: 70px;
 }
 
 .container{
@@ -16,7 +17,7 @@ body{
 
 h1{
     text-align:center;
-}
+}	
 
 .controls{
     display:flex;
@@ -183,4 +184,112 @@ select{
     border-radius:20px;
     background:#444;
     color:#fff;
+}
+
+
+
+.history-item{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    margin-bottom:10px;
+    overflow:hidden;
+}
+
+.history-item summary{
+    padding:12px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.history-content{
+    position:relative;
+    padding:12px;
+}
+
+.history-content button{
+    background:#e53935;
+    color:white;
+    border:none;
+    padding:8px 12px;
+    border-radius:8px;
+}
+
+
+
+
+
+
+
+.delete-btn{
+    position:absolute;
+    top:15px;
+    right:10px;
+
+    background:#ff4d4f;
+    color:white;
+
+    width:36px;
+    height:36px;
+
+    border:none;
+    border-radius:50%;
+}
+
+
+.delete-btn:hover{
+    background:#d9363e;
+    transform:scale(1.1);
+}
+
+
+
+
+.ball{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+
+    width:15px;
+    height:15px;
+    margin: 1.5px;
+
+    border-radius:50%;
+
+    font-size:10px;
+    color:#000;
+
+    background:#ffd54f;
+}
+
+.swipe-wrapper{
+    position:relative;
+    overflow:hidden;
+}
+
+.delete-area{
+    position:absolute;
+    right:0;
+    top:0;
+
+    width:80px;
+    height:100%;
+
+    background:#ff3b30;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.delete-area button{
+    background:none;
+    border:none;
+    color:white;
+    font-size:24px;
+}
+
+.swipe-content{
+    background:var(--card);
+    transition:0.3s;
 }

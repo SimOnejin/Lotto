@@ -24,4 +24,41 @@ themeBtn.addEventListener("click",()=>{
     }
 });
 
+
+document.querySelectorAll('.swipe-content').forEach(card=>{
+
+    let startX = 0;
+
+    card.addEventListener('touchstart',(e)=>{
+
+        startX = e.touches[0].clientX;
+
+    });
+
+    card.addEventListener('touchmove',(e)=>{
+
+        const moveX =
+            e.touches[0].clientX - startX;
+
+        if(moveX < -50){
+
+            card.style.transform =
+                'translateX(-80px)';
+        }
+
+    });
+
+    card.addEventListener('touchend',()=>{
+
+        setTimeout(()=>{
+
+            card.style.transform =
+                'translateX(0px)';
+
+        },3000);
+
+    });
+
+});
+
 loadTheme();
