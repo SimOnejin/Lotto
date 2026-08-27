@@ -161,6 +161,11 @@ select{
     overflow:hidden;
 }
 
+
+.history-item:not(:last-child){
+    border-bottom:2px solid #888;
+}
+
 .history-item summary{
     padding:12px;
     cursor:pointer;
@@ -189,19 +194,26 @@ select{
 
 .delete-btn{
     position:absolute;
-    top:15px;
+    top:12px;
     right:10px;
+
+    width:clamp(32px, 8vw, 42px);
+    height:clamp(32px, 8vw, 42px);
 
     background:#ff4d4f;
     color:white;
 
-    width:36px;
-    height:36px;
-
     border:none;
     border-radius:50%;
-    font-size:14px;
+
     padding:0;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:clamp(20px, 4vw, 30px);
+    line-height:1;
 }
 
 
@@ -225,8 +237,15 @@ select{
 
 .history-ticket{
     display:flex;
-    gap:6px;
+    gap:4px;
     margin-bottom:8px;
+    padding-bottom:3px;
+    border-bottom:1px solid rgba(136, 136, 136, 0.2);
+}
+
+.history-ticket:last-child{
+    border-bottom:none;
+}
 }
 
 .number{
