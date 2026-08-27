@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>로또 번호 생성기</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f6f8;
+    margin:0;
+    padding:20px;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+
+h1{
+    text-align:center;
+}
+
+.controls{
+    display:flex;
+    flex-wrap:wrap;
+    gap:15px;
+    margin-bottom:20px;
+}
+
+label{
+    font-weight:bold;
+}
+
+select,button{
+    padding:8px 12px;
+    font-size:16px;
+}
+
+button{
+    cursor:pointer;
+    border:none;
+    border-radius:8px;
+    background:#1976d2;
+    color:white;
+}
+
+button:hover{
+    background:#1565c0;
+}
+
+.result{
+    margin-top:20px;
+}
+
+.ticket{
+    padding:12px;
+    margin:10px 0;
+    background:#eef5ff;
+    border-radius:8px;
+}
+
+.number{
+    display:inline-block;
+    width:38px;
+    height:38px;
+    line-height:38px;
+    text-align:center;
+    border-radius:50%;
+    background:#ffcc00;
+    margin-right:6px;
+    font-weight:bold;
+}
+
+.history{
+    margin-top:30px;
+}
+
+.history-item{
+    border-bottom:1px solid #ddd;
+    padding:10px 0;
+}
+
+.clear-btn{
+    background:#d32f2f;
+}
+
+.clear-btn:hover{
+    background:#b71c1c;
+}
+
+
+
+
+
+
+
+:root{
+    --bg:#f5f5f5;
+    --card:#ffffff;
+    --text:#222;
+    --border:#ddd;
+}
+
+.dark{
+    --bg:#121212;
+    --card:#1e1e1e;
+    --text:#ffffff;
+    --border:#333;
+}
+
+body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+    transition:.3s;
+}
+
+.container{
+    max-width:600px;
+    margin:auto;
+    padding:16px;
+}
+
+.ticket{
+    background:var(--card);
+    padding:15px;
+    margin:10px 0;
+    border-radius:15px;
+    border:1px solid var(--border);
+}
+
+.number{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    margin:3px;
+    font-weight:bold;
+    background:#ffd54f;
+    color:#000;
+}
+
+.controls{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+select{
+    width:100%;
+    padding:12px;
+    font-size:16px;
+    border-radius:10px;
+}
+
+.main-btn{
+    position:fixed;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    width:90%;
+    max-width:500px;
+    padding:16px;
+    font-size:18px;
+    border:none;
+    border-radius:50px;
+    background:#1976d2;
+    color:white;
+    font-weight:bold;
+    z-index:999;
+}
+
+.top-bar{
+    display:flex;
+    justify-content:flex-end;
+    margin-bottom:15px;
+}
+
+#themeToggle{
+    border:none;
+    padding:10px 15px;
+    border-radius:20px;
+    background:#444;
+    color:#fff;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+    <button id="themeToggle">🌙 다크모드</button>
+</div>
+
+<div class="container">
+    <h1>🎲 로또 번호 생성기</h1>
+
+    <div class="controls">
+        <div>
+            <label>번호 개수</label><br>
+            <select id="numberCount">
+                <option value="6">6개</option>
+                <option value="7">7개</option>
+            </select>
+        </div>
+
+        <div>
+            <label>생성 횟수</label><br>
+            <select id="drawCount">
+                <option value="1">1회</option>
+                <option value="2">2회</option>
+                <option value="3">3회</option>
+                <option value="5">5회</option>
+                <option value="10">10회</option>
+            </select>
+        </div>
+
+        <div style="align-self:end;">
+            <button class="main-btn" onclick="generateLotto()">
+                🎲 번호 생성하기
+            </button>
+        </div>
+
+        <div style="align-self:end;">
+            <button class="clear-btn" onclick="clearHistory()">이력 삭제</button>
+        </div>
+    </div>
+
+    <div id="result" class="result"></div>
+
+    <div class="history">
+        <h2>생성 이력</h2>
+        <div id="history"></div>
+    </div>
+</div>
+
+<script>
+function generateNumbers(count){
+    const numbers = [];
+
+    while(numbers.length < count){
+        const num = Math.floor(Math.random() * 45) + 1;
+
+        if(!numbers.includes(num)){
+            numbers.push(num);
+        }
+    }
+
+    return numbers.sort((a,b)=>a-b);
+}
+
+function generateLotto(){
+    const numberCount = Number(document.getElementById("numberCount").value);
+    const drawCount = Number(document.getElementById("drawCount").value);
+
+    const resultDiv = document.getElementById("result");
+    resultDiv.innerHTML = "";
+
+    const allResults = [];
+
+    for(let i=0;i<drawCount;i++){
+        const nums = generateNumbers(numberCount);
+
+        allResults.push(nums);
+
+        const ticket = document.createElement("div");
+        ticket.className = "ticket";
+
+        nums.forEach(n=>{
+            const span = document.createElement("span");
+            span.className = "number";
+            span.textContent = n;
+            ticket.appendChild(span);
+        });
+
+        resultDiv.appendChild(ticket);
+    }
+
+    saveHistory(numberCount, drawCount, allResults);
+    loadHistory();
+}
+
+function saveHistory(numberCount, drawCount, results){
+    const history = JSON.parse(localStorage.getItem("lottoHistory") || "[]");
+
+    history.unshift({
+        date: new Date().toLocaleString(),
+        numberCount,
+        drawCount,
+        results
+    });
+
+    localStorage.setItem(
+        "lottoHistory",
+        JSON.stringify(history)
+    );
+}
+
+function loadHistory(){
+    const history = JSON.parse(localStorage.getItem("lottoHistory") || "[]");
+
+    const historyDiv = document.getElementById("history");
+    historyDiv.innerHTML = "";
+
+    history.forEach(item=>{
+        const div = document.createElement("div");
+        div.className = "history-item";
+
+        div.innerHTML = `
+            <strong>${item.date}</strong><br>
+            ${item.results
+                .map(arr => arr.join(", "))
+                .join("<br>")}
+        `;
+
+        historyDiv.appendChild(div);
+    });
+}
+
+function clearHistory(){
+    if(confirm("이력을 모두 삭제할까요?")){
+        localStorage.removeItem("lottoHistory");
+        loadHistory();
+    }
+}
+
+loadHistory();
+</script>
+
+</body>
+</html>
