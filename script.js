@@ -105,7 +105,29 @@ function toggleWinningInfo(){
 
 
 
+const slotMode =
+    document.getElementById("slotMode");
 
+function loadSlotMode(){
+
+    const saved =
+        localStorage.getItem("slotMode");
+
+    if(saved === "true"){
+        slotMode.checked = true;
+    }
+}
+
+slotMode.addEventListener("change", () => {
+
+    localStorage.setItem(
+        "slotMode",
+        slotMode.checked
+    );
+
+});
+
+loadSlotMode();
 
 
 

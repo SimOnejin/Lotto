@@ -37,6 +37,29 @@
                 <option value="10">10회</option>
             </select>
         </div>
+        
+        
+        
+        
+        
+		<div class="slot-container">
+
+		    <label class="switch">
+		        <input
+		            type="checkbox"
+		            id="slotMode">
+
+		        <span class="slider"></span>
+		    </label>
+
+		    <span>슬롯머신 효과</span>
+
+		</div>
+        
+        
+        
+        
+        
 
         <div style="align-self:end;">
             <button class="main-btn" onclick="generateLotto()">
@@ -131,10 +154,16 @@
 
 <script>
 function generateNumbers(count){
+
+    const maxNumber =
+        count === 7 ? 37 : 43;
+
     const numbers = [];
 
     while(numbers.length < count){
-        const num = Math.floor(Math.random() * 45) + 1;
+
+        const num =
+            Math.floor(Math.random() * maxNumber) + 1;
 
         if(!numbers.includes(num)){
             numbers.push(num);
@@ -144,36 +173,256 @@ function generateNumbers(count){
     return numbers.sort((a,b)=>a-b);
 }
 
-function generateLotto(){
-    const numberCount = Number(document.getElementById("numberCount").value);
-    const drawCount = Number(document.getElementById("drawCount").value);
 
-    const resultDiv = document.getElementById("result");
+
+function animateNumber(element, finalNumber, maxNumber){
+
+	console.log(
+    "final =", finalNumber,
+    "max =", maxNumber
+);//max = undefined 문제 계속 발생 해결 필요.maxNumber를 파라미터로써 못 받나?
+
+    return new Promise(resolve => {
+
+        element.classList.add("spinning");
+
+        let delay = 50;
+
+        let spinCount =
+            Math.floor(Math.random() * 20) + 20;
+
+        function changeNumber(num){
+
+            element.innerHTML =
+                `<span class="rolling">
+                    ${num}
+                </span>`;
+        }
+
+        function spin(count){
+
+            if(count <= 0){
+
+                element.innerHTML =
+                    `<span class="final">
+                        ${finalNumber}
+                    </span>`;
+
+                element.classList.remove("spinning");
+                element.classList.add("stop");
+
+                resolve();
+
+                return;
+            }
+
+            const randomNum =
+                Math.floor(Math.random() * (maxNumber || 37)) + 1;
+
+            changeNumber(randomNum);
+
+            // 마지막 3회 감속
+            if(count <= 3){
+                delay += 150;
+            }
+
+            setTimeout(() => {
+
+                spin(count - 1);
+
+            }, delay);
+        }
+
+        spin(spinCount);
+
+    });
+
+}
+
+
+
+async function animateTicket(ticket, nums){
+
+    const promises = [];
+
+    nums.forEach(n => {
+
+	    const span =
+	        document.createElement("span");
+
+	    span.className = "number";
+
+	    ticket.appendChild(span);
+
+		const slotEnabled =
+		    localStorage.getItem("slotMode")
+		    === "true";
+
+		if(slotEnabled){
+		    animateNumber(
+		        span,
+		        n, 
+		        maxNumber
+		    );
+		}else{
+		    span.textContent = n;
+		}
+
+	});
+
+    await Promise.all(promises);
+}
+
+
+
+
+
+
+
+
+
+
+
+async function generateLotto(){
+
+
+
+    const numberCount =
+        Number(
+            document.getElementById("numberCount").value
+        );
+
+    const drawCount =
+        Number(
+            document.getElementById("drawCount").value
+        );
+
+    const resultDiv =
+        document.getElementById("result");
+
+const maxNumber =
+    numberCount === 7 ? 37 : 43;
+
+
     resultDiv.innerHTML = "";
 
     const allResults = [];
 
-    for(let i=0;i<drawCount;i++){
-        const nums = generateNumbers(numberCount);
+    const tickets = [];
+
+    // 티켓 전부 먼저 생성
+    for(let i = 0; i < drawCount; i++){
+
+        const nums =
+            generateNumbers(numberCount);
 
         allResults.push(nums);
 
-        const ticket = document.createElement("div");
+        const ticket =
+            document.createElement("div");
+
         ticket.className = "ticket";
 
-        nums.forEach(n=>{
-            const span = document.createElement("span");
-            span.className = "number";
-            span.textContent = n;
-            ticket.appendChild(span);
-        });
-
         resultDiv.appendChild(ticket);
+
+        tickets.push({
+            ticket,
+            nums
+        });
     }
 
-    saveHistory(numberCount, drawCount, allResults);
+    const slotEnabled =
+        localStorage.getItem("slotMode")
+        === "true";
+
+    // 슬롯머신 OFF
+    if(!slotEnabled){
+
+        tickets.forEach(item => {
+
+            item.nums.forEach(n => {
+
+                const span =
+                    document.createElement("span");
+
+                span.className = "number";
+
+                span.textContent = n;
+
+                item.ticket.appendChild(span);
+
+            });
+
+        });
+
+    }
+
+    // 슬롯머신 ON
+    else{
+
+        const animations = [];
+
+tickets.forEach((item, ticketIndex) => {
+
+    item.nums.forEach(n => {
+
+        const span =
+            document.createElement("span");
+
+        span.className =
+            "number spinning";
+
+        item.ticket.appendChild(span);
+
+        animations.push(
+
+            new Promise(resolve => {
+
+                setTimeout(async () => {
+
+                    await animateNumber(
+                        span,
+                        n,
+                        item.maxNumber
+                    );
+
+                    resolve();
+
+                }, ticketIndex * 350);
+
+            })
+
+        );
+
+    });
+
+});
+
+await Promise.all(animations);
+
+    }
+
+    saveHistory(
+        numberCount,
+        drawCount,
+        allResults
+    );
+
     loadHistory();
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 function saveHistory(numberCount, drawCount, results){
     const history = JSON.parse(localStorage.getItem("lottoHistory") || "[]");
@@ -520,7 +769,30 @@ function toggleWinningInfo(){
         "▼ 당첨번호 숨기기";
 }
 
+const slotMode =
+    document.getElementById("slotMode");
 
+function loadSlotMode(){
+
+    const saved =
+        localStorage.getItem("slotMode");
+
+    if(saved === "true"){
+        slotMode.checked = true;
+    }
+
+}
+
+slotMode.addEventListener("change", () => {
+
+    localStorage.setItem(
+        "slotMode",
+        slotMode.checked
+    );
+
+});
+
+loadSlotMode();
 
 loadHistory();
 </script>
