@@ -228,18 +228,22 @@ select{
 
 }
 
-a:link{
-  color : #333;
-}
-a:visited{
-  color : #333;
-}
-a:active{
-  color : #333;
-}
+
+a:link,
+a:visited,
+a:active,
 a:hover{
-  color : #333;
+    color:#333;
 }
+
+.dark a:link,
+.dark a:visited,
+.dark a:active,
+.dark a:hover{
+    color:white;
+}
+`
+
 
 .delete-btn{
     position:absolute;
@@ -665,9 +669,6 @@ body.dark{
     color:var(--text);
 }
 
-.dark a:link{
-	color:white;
-}
 
 
 
