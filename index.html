@@ -975,7 +975,23 @@ loadFavorites();
 
 
 
+window.addEventListener("pageshow", () => {
 
+    const info =
+        document.getElementById("winningInfo");
+
+    const toggle =
+        document.getElementById("winningToggle");
+
+    info.classList.remove("show");
+
+    toggle.textContent =
+        "▶ 당첨번호 보기";
+
+    showWinningInfo();
+    loadHistory();
+    loadFavorites();
+});
 
 
 

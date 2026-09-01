@@ -10,7 +10,7 @@
 <body>
 
 <div class="container">
-<h3>현재 저장된 당첨번호</h3>
+<!--<h3>현재 저장된 당첨번호</h3>-->
 
 <div id="currentWinning"></div>
     <h1>당첨번호 입력</h1>
@@ -83,7 +83,70 @@ function saveWinningInfo(){
     location.href="index.html";
     
     
-    window.onload = () => {
+    }
+
+
+
+function clearWinningNumbers(){
+
+    if(!confirm("등록된 당첨번호를 삭제할까요?")){
+        return;
+    }
+
+    localStorage.removeItem("lotteryType");
+    localStorage.removeItem("winningNumbers");
+    localStorage.removeItem("bonusNumbers");
+
+
+    if(typeof loadFavorites === "function"){
+        loadFavorites();
+    }
+	
+	
+	
+	document.getElementById("currentWinning").innerHTML =
+    	"<p>등록된 당첨번호가 없습니다.</p>";
+
+	document.getElementById("winningNumbers").value = "";
+	document.getElementById("bonusNumbers").value = "";
+	
+	location.reload();
+	window.location.reload();
+}
+
+function updateCurrentWinning(){
+
+    const lotteryType =
+        localStorage.getItem("lotteryType");
+
+    const winningNumbers =
+        localStorage.getItem("winningNumbers");
+
+    const bonusNumbers =
+        localStorage.getItem("bonusNumbers");
+
+    const current =
+        document.getElementById("currentWinning");
+
+    if(!lotteryType){
+
+        current.innerHTML =
+            "<p>등록된 당첨번호가 없습니다.</p>";
+
+        return;
+    }
+
+    //current.innerHTML = `
+      //  <p>종류 : Loto${lotteryType}</p>
+      //  <p>본번호 : ${winningNumbers}</p>
+      //  <p>보너스 : ${bonusNumbers}</p>
+    //`;
+}
+
+
+
+
+window.onload = () => {
 
     const lotteryType =
         localStorage.getItem("lotteryType") || "7";
@@ -103,56 +166,12 @@ function saveWinningInfo(){
     document.getElementById("bonusNumbers").value =
         bonusNumbers;
 
-    document.getElementById("currentWinning").innerHTML = `
-        <p>종류 : Loto${lotteryType}</p>
-        <p>본번호 : ${winningNumbers}</p>
-        <p>보너스 : ${bonusNumbers}</p>
-    `;
+	updateCurrentWinning();
+	
 };
 
-function saveWinningInfo(){
-
-    localStorage.setItem(
-        "lotteryType",
-        document.getElementById("lotteryType").value
-    );
-
-    localStorage.setItem(
-        "winningNumbers",
-        document.getElementById("winningNumbers").value
-    );
-
-    localStorage.setItem(
-        "bonusNumbers",
-        document.getElementById("bonusNumbers").value
-    );
-
-    alert("저장되었습니다.");
-
-    location.href = "index.html";
-}
-}
 
 
-
-function clearWinningNumbers(){
-
-    if(!confirm("등록된 당첨번호를 삭제할까요?")){
-        return;
-    }
-
-    localStorage.removeItem("lotteryType");
-    localStorage.removeItem("winningNumbers");
-    localStorage.removeItem("bonusNumbers");
-
-    loadHistory();
-
-    if(typeof loadFavorites === "function"){
-        loadFavorites();
-    }
-
-    alert("당첨번호가 삭제되었습니다.");
-}
 
 </script>
 
