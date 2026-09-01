@@ -1,138 +1,41 @@
-const themeBtn = document.getElementById("themeToggle");
+// ====================
+// 다크모드
+// ====================
 
+const themeBtn =
+    document.getElementById("themeToggle");
+
+// 저장된 테마 불러오기
 function loadTheme(){
-    const savedTheme = localStorage.getItem("theme");
-    const container = document.querySelector(".container");
-    const themeToggle = document.querySelector("#themeToggle");
+
+    const savedTheme =
+        localStorage.getItem("theme");
 
     if(savedTheme === "dark"){
+
         document.body.classList.add("dark");
-        container.classList.add("dark");
-        themeToggle.classList.add("dark");
-        
-        themeBtn.textContent = "☀️ 라이트모드";
+
+        themeBtn.textContent =
+            "☀️ 라이트모드";
     }
 }
 
+// 버튼 클릭
 themeBtn.addEventListener("click", () => {
-    document.body.classList.toggle("dark");
 
-    const container = document.querySelector(".container");
-    const themeToggle = document.querySelector("#themeToggle");
-    container.classList.toggle("dark");
-    themeToggle.classList.toggle("dark");
-
-    const isDark = document.body.classList.contains("dark");
-
-    if(isDark){
-        localStorage.setItem("theme", "dark");
-        themeBtn.textContent = "☀️ 라이트모드";
-    }else{
-        localStorage.setItem("theme", "light");
-        themeBtn.textContent = "🌙 다크모드";
-    }
-});
-
-
-const modal =
-    new bootstrap.Modal(
-        document.getElementById("myModal")
-    );
-
-modal.show();
-
-
-
-
-
-
-
-
-function toggleWinningInfo(){
-
-    const info =
-        document.getElementById("winningInfo");
-
-    const toggle =
-        document.getElementById("winningToggle");
-
-    if(info.classList.contains("show")){
-
-        info.classList.remove("show");
-
-        toggle.textContent =
-            "▶ 당첨번호 보기";
-
-        return;
-    }
-
-    const lotteryType =
-        localStorage.getItem("lotteryType");
-
-    const winningNumbers =
-        localStorage.getItem("winningNumbers");
-
-    const bonusNumbers =
-        localStorage.getItem("bonusNumbers");
-
-    if(!lotteryType){
-
-        info.innerHTML =
-            "등록된 당첨번호가 없습니다.";
-
-    }else{
-
-        info.innerHTML = `
-            <div>
-                <b>Loto${lotteryType}</b>
-            </div>
-
-            <div>
-                본번호 : ${winningNumbers}
-            </div>
-
-            <div>
-                보너스 : ${bonusNumbers}
-            </div>
-        `;
-    }
-
-    info.classList.add("show");
-
-    toggle.textContent =
-        "▼ 당첨번호 숨기기";
-}
-
-
-
-const slotMode =
-    document.getElementById("slotMode");
-
-function loadSlotMode(){
-
-    const saved =
-        localStorage.getItem("slotMode");
-
-    if(saved === "true"){
-        slotMode.checked = true;
-    }
-}
-
-slotMode.addEventListener("change", () => {
+    const isDark =
+        document.body.classList.toggle("dark");
 
     localStorage.setItem(
-        "slotMode",
-        slotMode.checked
+        "theme",
+        isDark ? "dark" : "light"
     );
 
+    themeBtn.textContent =
+        isDark
+            ? "☀️ 라이트모드"
+            : "🌙 다크모드";
 });
 
-loadSlotMode();
-
-
-
-
-
-
-
+// 시작 시 적용
 loadTheme();
