@@ -35,6 +35,16 @@
         placeholder="보너스번호 입력">
 
     <br><br>
+    
+    
+    
+    <button
+	    class="btn btn-danger"
+	    onclick="clearWinningNumbers()">
+	    당첨번호 삭제
+	</button>
+
+
 
     <button onclick="saveWinningInfo()">
         저장 후 결과 보기
@@ -121,6 +131,27 @@ function saveWinningInfo(){
 
     location.href = "index.html";
 }
+}
+
+
+
+function clearWinningNumbers(){
+
+    if(!confirm("등록된 당첨번호를 삭제할까요?")){
+        return;
+    }
+
+    localStorage.removeItem("lotteryType");
+    localStorage.removeItem("winningNumbers");
+    localStorage.removeItem("bonusNumbers");
+
+    loadHistory();
+
+    if(typeof loadFavorites === "function"){
+        loadFavorites();
+    }
+
+    alert("당첨번호가 삭제되었습니다.");
 }
 
 </script>
